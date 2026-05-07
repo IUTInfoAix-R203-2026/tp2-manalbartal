@@ -25,13 +25,11 @@ class HelloWorldTest {
 
   // ========= Salutation par défaut =========
 
-  @Disabled("Retire cette annotation pour activer le test")
   @Test
   void saluer_sans_nom_retourne_hello_world() {
     assertThat(HelloWorld.saluer(null)).isEqualTo("Hello, World!");
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
   @Test
   void saluer_chaine_vide_retourne_hello_world() {
     assertThat(HelloWorld.saluer("")).isEqualTo("Hello, World!");
@@ -39,13 +37,11 @@ class HelloWorldTest {
 
   // ========= Triangulation : plusieurs noms =========
 
-  @Disabled("Retire cette annotation pour activer le test")
   @Test
   void saluer_alice_retourne_hello_alice() {
     assertThat(HelloWorld.saluer("Alice")).isEqualTo("Hello, Alice!");
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
   @Test
   void saluer_bob_retourne_hello_bob() {
     assertThat(HelloWorld.saluer("Bob")).isEqualTo("Hello, Bob!");
