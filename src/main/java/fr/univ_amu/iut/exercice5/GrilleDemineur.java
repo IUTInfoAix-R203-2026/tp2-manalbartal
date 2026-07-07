@@ -43,6 +43,23 @@ public class GrilleDemineur {
    */
   public GrilleDemineur(List<String> grilleInitiale) {
     // TODO exercice 5 : valider l'entrée puis stocker la grille.
+    if (grilleInitiale == null) {
+      throw new IllegalArgumentException("La grille ne peut pas être null");
+    }
+    if (!grilleInitiale.isEmpty()) {
+      int longueurRef = grilleInitiale.get(0).length();
+      for (String ligne : grilleInitiale) {
+        if (ligne.length() != longueurRef) {
+          throw new IllegalArgumentException("Toutes les lignes doivent avoir la même longueur");
+        }
+        for (char c : ligne.toCharArray()) {
+          if (c != ' ' && c != '*') { // ici il y a * car dans la grille c'est ce qu'il y a
+            throw new IllegalArgumentException(
+                "Caractère invalide '" + c + "' : seuls ' ' et '*' sont autorisés");
+          }
+        }
+      }
+    }
     this.grille = grilleInitiale == null ? List.of() : List.copyOf(grilleInitiale);
   }
 
@@ -55,13 +72,44 @@ public class GrilleDemineur {
     // TODO exercice 5 : remplir resultat avec une ligne annotée par ligne d'entrée.
     //
     // Pour chaque case (ligne, col) :
-    //   - si c'est une mine ('*'), laisser '*'
-    //   - sinon compter les mines dans les 8 cases voisines (en gérant les bords)
-    //   - si le compte est > 0, écrire ce chiffre
-    //   - si le compte est 0, écrire un espace
+    // - si c'est une mine ('*'), laisser '*'
+    // - sinon compter les mines dans les 8 cases voisines (en gérant les bords)
+    // - si le compte est > 0, écrire ce chiffre
+    // - si le compte est 0, écrire un espace
     //
     // Astuce : une méthode privée compterMinesAdjacentes(int, int) facilite
     // la gestion des bords et rend le code testable.
+    for (int ligne = 0; ligne < grille.size(); ligne++) {
+      StringBuilder ligneAnnotee = new StringBuilder();
+      for (int col = 0; col < grille.get(ligne).length(); col++) {
+        if (grille.get(ligne).charAt(col) == '*') {
+          ligneAnnotee.append('*');
+        } else {
+          int count = compterMinesAdjacentes(ligne, col);
+          ligneAnnotee.append(count > 0 ? (char) ('0' + count) : ' ');
+        }
+      }
+      resultat.add(ligneAnnotee.toString());
+    }
     return resultat;
+  }
+
+  private int compterMinesAdjacentes(int indiceLigne, int indiceColonne) {
+    int nombreMines = 0;
+    for (int decalageLigne = -1; decalageLigne <= 1; decalageLigne++) {
+      for (int decalageColonne = -1; decalageColonne <= 1; decalageColonne++) {
+        if (decalageLigne == 0 && decalageColonne == 0) continue;
+        int ligneVoisine = indiceLigne + decalageLigne;
+        int colonneVoisine = indiceColonne + decalageColonne;
+        if (ligneVoisine >= 0
+            && ligneVoisine < grille.size()
+            && colonneVoisine >= 0
+            && colonneVoisine < grille.get(ligneVoisine).length()
+            && grille.get(ligneVoisine).charAt(colonneVoisine) == '*') {
+          nombreMines++;
+        }
+      }
+    }
+    return nombreMines;
   }
 }
