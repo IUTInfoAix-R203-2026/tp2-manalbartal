@@ -25,7 +25,6 @@ package fr.univ_amu.iut.exercice3;
  * calculer la valeur d'un symbole - vous en aurez besoin pour les symboles suivants.
  */
 public class ConvertisseurDeNombreRomain {
-
   /**
    * Convertit une chaîne de chiffres romains en valeur entière.
    *
@@ -35,6 +34,7 @@ public class ConvertisseurDeNombreRomain {
    *     interdite
    */
   public int enNombreArabe(String chiffreRomain) {
+
     int total = 0;
     // TODO exercice 3 : remplir total en parcourant la chaîne.
     //
@@ -47,6 +47,116 @@ public class ConvertisseurDeNombreRomain {
     //
     // Pour les exceptions : une soustraction est valide seulement pour
     // I avant V/X, X avant L/C, C avant D/M. Tout le reste est invalide.
+
+    for (int i = 0; i < chiffreRomain.length(); i++) {
+
+      char symbole = chiffreRomain.charAt(i);
+      int valeurCourante = 0;
+
+      switch (symbole) {
+        case 'I':
+          valeurCourante = 1;
+          break;
+
+        case 'V':
+          valeurCourante = 5;
+          break;
+
+        case 'X':
+          valeurCourante = 10;
+          break;
+
+        case 'L':
+          valeurCourante = 50;
+          break;
+
+        case 'C':
+          valeurCourante = 100;
+          break;
+
+        case 'D':
+          valeurCourante = 500;
+          break;
+
+        case 'M':
+          valeurCourante = 1000;
+          break;
+
+        default:
+          throw new IllegalArgumentException("Symbole invalide : " + symbole);
+      }
+
+      if (i + 1 < chiffreRomain.length()) {
+
+        char symboleSuivant = chiffreRomain.charAt(i + 1);
+        int valeurSuivante = 0;
+
+        switch (symboleSuivant) {
+          case 'I':
+            valeurSuivante = 1;
+            break;
+
+          case 'V':
+            valeurSuivante = 5;
+            break;
+
+          case 'X':
+            valeurSuivante = 10;
+            break;
+
+          case 'L':
+            valeurSuivante = 50;
+            break;
+
+          case 'C':
+            valeurSuivante = 100;
+            break;
+
+          case 'D':
+            valeurSuivante = 500;
+            break;
+
+          case 'M':
+            valeurSuivante = 1000;
+            break;
+        }
+
+        if (valeurCourante < valeurSuivante) {
+
+          boolean valide = false;
+
+          switch (symbole) {
+            case 'I':
+              valide = symboleSuivant == 'V' || symboleSuivant == 'X';
+              break;
+
+            case 'X':
+              valide = symboleSuivant == 'L' || symboleSuivant == 'C';
+              break;
+
+            case 'C':
+              valide = symboleSuivant == 'D' || symboleSuivant == 'M';
+              break;
+
+            default:
+              valide = false;
+              break;
+          }
+
+          if (!valide) {
+            throw new IllegalArgumentException(
+                "Soustraction invalide : " + symbole + " avant " + symboleSuivant);
+          }
+
+          total += valeurSuivante - valeurCourante;
+          i++;
+          continue;
+        }
+      }
+
+      total += valeurCourante;
+    }
+
     return total;
   }
 }
